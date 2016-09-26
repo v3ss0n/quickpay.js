@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Testing QuickPay</title>
+</head>
+<body>
+
+	<h1>Hello World!</h1>
+	<button onclick="checkout.open();"></button>
+	
+	<script src="http://localhost:3000/quickpay.js"></script>
+	<script>
+		
+		var checkout = Paysbuy.QuickPay.configure({
+			key: 'pub_hrkK7qM6Can2vCsolp'
+		});
+
+		//checkout.open({});
+
+	</script>
+</body>
+</html>
