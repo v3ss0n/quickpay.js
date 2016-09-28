@@ -14,7 +14,13 @@
 		
 		var checkout = Paysbuy.QuickPay.configure({
 			key: 'pub_hrkK7qM6Can2vCsolp',
-			onComplete: checkoutDone
+			onComplete: checkoutDone,
+			title: 'mywidgetshop.com',
+			image: 'http://pipsum.com/64x64.jpg',
+			description: '2 Widgets @ ฿150',
+			currency: 'THB',
+			amount: 2999.99,
+			submitLabel: 'Click here to pay {amount} to my beer fund'
 		});
 
 		function checkoutDone(result) {

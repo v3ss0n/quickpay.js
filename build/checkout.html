@@ -4,26 +4,50 @@
 	<meta charset="UTF-8">
 	<title>Document</title>
 	<style>
+		.qp-cover {
+			position: absolute;
+			left: 0;
+			right: 0;
+			top: 0;
+			bottom: 0;
+		}
 		.checkout {
-			position:absolute;
-			left:50%;
-			top:50%;
-			margin-top:-300px;
-			margin-left:-200px;
-			width:400px;
-			height:600px;
+			position: absolute;
+			left: 50%;
+			top: 22%;
+			margin-left: -200px;
+			width: 400px;
+			height: 300px;
 			background: #fff;
-			padding:20px;
+			padding: 20px;
+		}
+		.qp-img {
+			border-radius: 50%;
+			vertical-align: middle;
 		}
 	</style>
 </head>
 <body>
+	<div class="qp-cover"></div>
 	<div class="checkout">
-		<h2>Checkout</h2>
-		<input class="btn-pay" type="button" value="Pay">
+		<h1>
+			<img class="qp-img" width="64" height="64">
+			<span class="qp-title"></span>
+		</h1>
+		
+		<p class="qp-desc"></p>
+		<form>
+			<input type="text" name="email" placeholder="Email"><br>
+			<input type="text" name="card_number" placeholder="Card number" maxlength="16"><br>
+			<input type="text" name="card_expiry_date" placeholder="Expiry date"><br>
+			<input type="text" name="card_cvn" placeholder="CVV"><br><br>
+			<input class="btn-pay" type="button" value="">
+		</form>
 	</div>
+
 	<script src="https://dev.mob.paysbuy.com/wallet/demopay/assets/paysbuy.min.js"></script>
 	<script src="jquery.js"></script>
 	<script src="checkout.js"></script>
+
 </body>
 </html>

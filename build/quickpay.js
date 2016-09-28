@@ -11,7 +11,7 @@
 				tokenHandler	: undefined,
 				image					: '',
 				locale				: 'en-GB',
-				submitLabel		: '',
+				submitLabel		: 'Pay {amount}',
 				title					: '',
 				description		: '',
 				amount				: 0,
@@ -44,7 +44,7 @@
 			open: function(params) {
 				var _p = _merge([{}, this._params, params || {}]);
 				this._sendConfigToCheckout(_p);
-				this._resultHandler = _p['onComplete'];
+				this._resultHandler = _p.onComplete;
 				this._showCheckout();
 			},
 
@@ -52,7 +52,7 @@
 				if (!this._checkoutWindow) {
 					this._wrapper = this._prepareWrapper();
 					this._iframe = this._prepareIframe();
-					this._checkoutListener = this._makeCheckoutListener();
+					this._checkoutListener = this._makeCheckoutListener(); 
 				}
 			},
 
@@ -144,7 +144,10 @@
 				iframe.src = _QPSERVER + _QPPATH + '/' + _QPPAGE;
 				// capture the contentWindow object of the frame when it has loaded
 				iframe.addEventListener("load", (function(_this) {
-					return function(e) { return _this._checkoutWindow = e.target.contentWindow; }
+					return function(e) { 
+						_this._checkoutWindow = e.target.contentWindow;
+						_this._sendConfigToCheckout(_this._params);
+					}
 				})(this));
 				this._wrapper.appendChild(iframe);
 				return iframe;

@@ -6,17 +6,23 @@
 	var
 		parentDomain = '',
 
-		_QP_CLOSEMESSAGE = 'close',
+		QP_CLOSEMESSAGE = 'close',
+		KEYCODE_ESC = 27,
 
 		btnPay = $('.btn-pay'),
+		heading = $('.qp-title'),
+		image = $('.qp-img'),
+		cover = $('.qp-cover'),
+		desc = $('.qp-desc'),
 
 		pbKey = ''
-
 	;
 
 	function init() {
 		listenToParent();
-		btnPay.on("click", pay);
+		btnPay.on('click', pay);
+		cover.on('click', closeCheckout);
+		$(document).on('keyup', closeOnEsc);
 	}
 
 	function pay() {
@@ -25,11 +31,20 @@
 	}
 
 	function getFormData(includeCard) {
-		var data = includeCard ? {
-			card_number: '4111111111111111',
-			card_expiry_date: '04-2020',
-			card_cvn: '324'
-		} : {};
+		var
+			formdata = $("form").serializeArray(),
+			data = {}
+		;
+		$(formdata).each(function(i, obj){
+			data[obj.name] = obj.value;
+		});
+
+		if (!includeCard) {
+			delete data.card_number;
+			delete data.card_expiry_date;
+			delete data.card_cvn;
+		}
+
 		data.key = pbKey;
 		return data;
 	}
@@ -54,7 +69,11 @@
 	}
 
 	function closeCheckout() {
-		messageParent(_QP_CLOSEMESSAGE);
+		messageParent(QP_CLOSEMESSAGE);
+	}
+
+	function closeOnEsc(e) {
+		if (e.keyCode == KEYCODE_ESC) closeCheckout(); 
 	}
 
 	function messageParent(msg) {
@@ -68,6 +87,30 @@
 
 	function setupForm(d) {
 		pbKey = d.key;
+		clearFields();
+		// heading
+		heading.html(d.title).toggle(!!d.title);
+		// image
+		image.attr({src:d.image, alt:d.title}).toggle(!!d.image);
+		// description
+		desc.html(d.description).toggle(!!d.description);
+		// button text
+		btnPay.val(getButtonLabel(d.submitLabel, d.amount, d.currency));
+		// focus first field
+		$('form input').eq(0).focus();
+	}
+
+	function clearFields() {
+		$('form input[type=text]').val('');
+	}
+
+	function getButtonLabel(txt, amount, curr) {
+		return txt.replace('{amount}', formatAmount(amount, curr));
+	}
+
+	function formatAmount(amount, curr) {
+		// TODO - fix this (locale?)
+		return '฿' + amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 	}
 
 	function parentListener(ev) {
