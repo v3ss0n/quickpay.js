@@ -5,6 +5,7 @@
 	var QuickPay = (function() {
 
 		var
+
 			_defaults = {
 				key						: '',
 				tokenHandler	: undefined,
@@ -16,9 +17,13 @@
 				amount				: 0,
 				currency			: 'THB'
 			},
-			_qpServer = 'http://localhost:3000',
-			_qpPath = '',
-			_qpPage = 'checkout.html'
+
+			_QPSERVER = 'http://localhost:3000',
+			_QPPATH = '',
+			_QPPAGE = 'checkout.html',
+
+			_QP_CLOSEMESSAGE = 'close'
+
 		;
 
 		function configure(params) {
@@ -38,8 +43,8 @@
 
 			open: function(params) {
 				var _p = _merge([{}, this._params, params || {}]);
-				//this._prepareCheckout();
-				// TODO ** - send setup data to checkout here first
+				this._sendConfigToCheckout(_p);
+				this._resultHandler = _p['onComplete'];
 				this._showCheckout();
 			},
 
@@ -47,7 +52,38 @@
 				if (!this._checkoutWindow) {
 					this._wrapper = this._prepareWrapper();
 					this._iframe = this._prepareIframe();
+					this._checkoutListener = this._makeCheckoutListener();
 				}
+			},
+
+			_sendConfigToCheckout: function(params) {
+				this._checkoutWindow.postMessage(JSON.stringify(params), _QPSERVER + _QPPATH);
+			},
+
+			_listenToCheckout: function() {
+				window.removeEventListener("message", this._checkoutListener);
+				window.addEventListener("message", this._checkoutListener, false);
+			},
+
+			_makeCheckoutListener: function() {
+				return (function(_this){
+					return function(ev) {
+
+						// check message is coming from checkout
+						if (!ev.origin || (ev.origin != _QPSERVER)) {
+							return false;
+						}
+
+						// receiving token or being asked to hide?
+						if (ev.data == _QP_CLOSEMESSAGE) {
+							return _this._hideCheckout();
+						} else {
+							if (_this._resultHandler) _this._resultHandler(JSON.parse(ev.data));
+							return _this._hideCheckout();
+						}
+
+					};
+				})(this);
 			},
 
 			_showCheckout: function() {
@@ -57,6 +93,7 @@
 				var transf = ['t', 'webkitT', 'MozT', 'msT', 'OT'];
 				for (var st in transf) this._iframe.style[transf[st]+'ransform'] = 'scale(1)'; 
 				this._iframe.style.opacity = '1';
+				this._listenToCheckout();
 			},
 
 			_hideCheckout: function() {
@@ -65,7 +102,7 @@
 				};})(this), 300);
 				document.body.style.overflow = '';
 				var transf = ['t', 'webkitT', 'MozT', 'msT', 'OT'];
-				for (var st in transf) this._iframe.style[transf[st]+'ransform'] = 'scale(0.85)'; 
+				for (var st in transf) this._iframe.style[transf[st]+'ransform'] = 'scale(0.9)'; 
 				this._iframe.style.opacity = '0';
 				this._wrapper.style.opacity = '0';
 			},
@@ -85,7 +122,7 @@
 					height: '100%'
 				});
 				var transi = ['', '-webkit-', '-moz-', '-ms-', '-o-'];
-				for (var st in transi) wrapper.style.setProperty(transi[st]+'transition', '200ms opacity ease, '+transi[st]+'transform 200ms');
+				for (var st in transi) wrapper.style.setProperty(transi[st]+'transition', '300ms opacity ease, '+transi[st]+'transform 300ms');
 				document.body.appendChild(wrapper);
 				return wrapper;
 			},
@@ -93,7 +130,7 @@
 			_prepareIframe: function() {
 				var styles = {}, st, iframe;
 				var transf = ['t', 'webkitT', 'MozT', 'msT', 'OT'];
-				for (st in transf) styles[transf[st]+'ransform'] = 'scale(0.85)'; 
+				for (st in transf) styles[transf[st]+'ransform'] = 'scale(0.9)'; 
 				_merge([styles, {
 					width: '100%',
 					height: '100%',
@@ -103,8 +140,8 @@
 				}]);
 				iframe = this._createStyledElement('iframe', styles);
 				var transi = ['', '-webkit-', '-moz-', '-ms-', '-o-'];
-				for (st in transi) iframe.style.setProperty(transi[st]+'transition', '200ms opacity ease, '+transi[st]+'transform 200ms');
-				iframe.src = _qpServer + _qpPath + '/' + _qpPage;
+				for (st in transi) iframe.style.setProperty(transi[st]+'transition', '300ms opacity ease, '+transi[st]+'transform 300ms');
+				iframe.src = _QPSERVER + _QPPATH + '/' + _QPPAGE;
 				// capture the contentWindow object of the frame when it has loaded
 				iframe.addEventListener("load", (function(_this) {
 					return function(e) { return _this._checkoutWindow = e.target.contentWindow; }

@@ -7,16 +7,19 @@
 <body>
 
 	<h1>Hello World!</h1>
-	<button onclick="checkout.open();"></button>
+	<button onclick="checkout.open();">Pay</button>
 	
 	<script src="http://localhost:3000/quickpay.js"></script>
 	<script>
 		
 		var checkout = Paysbuy.QuickPay.configure({
-			key: 'pub_hrkK7qM6Can2vCsolp'
+			key: 'pub_hrkK7qM6Can2vCsolp',
+			onComplete: checkoutDone
 		});
 
-		//checkout.open({});
+		function checkoutDone(result) {
+			alert('Token is: '+result.token);
+		}
 
 	</script>
 </body>
