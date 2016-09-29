@@ -147,7 +147,7 @@
 					return function(e) { 
 						_this._checkoutWindow = e.target.contentWindow;
 						_this._sendConfigToCheckout(_this._params);
-					}
+					};
 				})(this));
 				this._wrapper.appendChild(iframe);
 				return iframe;
@@ -181,5 +181,26 @@
 
 	window.Paysbuy = window.Paysbuy || {};
 	window.Paysbuy.QuickPay = QuickPay;
+
+	var qpScript = (function() {
+		var scripts = document.getElementsByTagName('script');
+		return scripts[scripts.length-1];
+	})();
+
+	if (qpScript.getAttribute('data-qp-key')) {
+		var qpScriptContainer = qpScript.parentNode;
+		var btn = document.createElement('button');
+		btn.innerHTML = 'Pay';
+		console.log(getQPConfigFromAttribs(qpScript.attributes));
+		qpScriptContainer.appendChild(btn);
+	}
+
+	function getQPConfigFromAttribs(attrs) {
+		var cfg = {}, rx = /^data-qp-(.+)/i, matches;
+		for (var i=0; i<attrs.length; i++) {
+			if (matches = attrs[i].name.match(rx)) cfg[matches[1].replace(/-([a-z])/g, function (g){return g[1].toUpperCase();})] = attrs[i].nodeValue;
+		}
+		return cfg;
+	}
 
 })(window);
