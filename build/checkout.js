@@ -9,11 +9,13 @@
 		QP_CLOSEMESSAGE = 'close',
 		KEYCODE_ESC = 27,
 
-		btnPay = $('.btn-pay'),
+		btnPay = $('.qp-btnpay'),
+		btnClose = $('.qp-btnclose'),
 		heading = $('.qp-title'),
 		image = $('.qp-img'),
 		cover = $('.qp-cover'),
 		desc = $('.qp-desc'),
+		indicator = $('.qp-loading'),
 
 		pbKey = ''
 	;
@@ -21,13 +23,20 @@
 	function init() {
 		listenToParent();
 		btnPay.on('click', pay);
-		cover.on('click', closeCheckout);
+		cover.add(btnClose).on('click', closeCheckout);
 		$(document).on('keyup', closeOnEsc);
 	}
 
 	function pay() {
 		// TODO - validate form
+		showIndicator();
 		doTokenization(getFormData(true), _tokenizationDone);
+	}
+
+	function showIndicator(state) {
+		state = !(state === false);
+		indicator.toggle(state);
+		btnPay.prop('disabled', state);
 	}
 
 	function getFormData(includeCard) {
@@ -56,6 +65,7 @@
 	}
 
 	function _tokenizationDone(status, response) {
+		showIndicator(false);
 		if (response.token) {
 			returnSuccess(response.token);
 		} else {

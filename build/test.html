@@ -6,8 +6,10 @@
 </head>
 <body>
 
-	<h1>Hello World!</h1>
+	<h1>PAYSBUY QuickPay</h1>
+	<p>Programmatically open the card window with buttons:</p>
 	<button onclick="checkout.open();">Pay</button>
+	<button onclick="checkout.open({title:'My Beer Fund',description:'Buy me a beer? Only 200 baht',image:'http://emoji.fileformat.info/gemoji/beer.png',submitLabel:'OK, cheers!'});">Pay another</button>
 	
 	<script src="http://localhost:3000/quickpay.js"></script>
 	<script>
@@ -17,11 +19,12 @@
 			onComplete: checkoutDone,
 			title: 'mywidgetshop.com',
 			image: 'http://pipsum.com/64x64.jpg',
-			description: '2 Widgets @ ฿150',
+			description: '2 Widgets @ ฿1,500',
 			currency: 'THB',
-			amount: 2999.99,
-			submitLabel: 'Click here to pay {amount} to my beer fund'
+			amount: 3000,
 		});
+
+
 
 		function checkoutDone(result) {
 			alert('Token is: '+result.token);
