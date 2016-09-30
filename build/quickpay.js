@@ -45,6 +45,7 @@
 				var _p = _merge([{}, this._params, params || {}]);
 				this._sendConfigToCheckout(_p);
 				this._resultHandler = _p.onComplete;
+				this._active = true;
 				this._showCheckout();
 			},
 
@@ -68,6 +69,8 @@
 			_makeCheckoutListener: function() {
 				return (function(_this){
 					return function(ev) {
+
+						if (!_this._active) return false;
 
 						// check message is coming from checkout
 						if (!ev.origin || (ev.origin != _QPSERVER)) {
@@ -105,6 +108,7 @@
 				for (var st in transf) this._iframe.style[transf[st]+'ransform'] = 'scale(0.9)'; 
 				this._iframe.style.opacity = '0';
 				this._wrapper.style.opacity = '0';
+				this._active = false;
 			},
 
 			_prepareWrapper: function() {
@@ -182,23 +186,59 @@
 	window.Paysbuy = window.Paysbuy || {};
 	window.Paysbuy.QuickPay = QuickPay;
 
+	// check if this script is being used as a quickpay button generator
 	var qpScript = (function() {
 		var scripts = document.getElementsByTagName('script');
 		return scripts[scripts.length-1];
 	})();
-
 	if (qpScript.getAttribute('data-qp-key')) {
-		var qpScriptContainer = qpScript.parentNode;
-		var btn = document.createElement('button');
-		btn.innerHTML = 'Pay';
-		console.log(getQPConfigFromAttribs(qpScript.attributes));
-		qpScriptContainer.appendChild(btn);
+
+		// create a launcher
+		var
+			cfg = getQPConfigFromAttribs(qpScript.attributes), 
+			launcher = QuickPay.configure(cfg),
+			container = qpScript.parentNode
+		;
+		// create quickpay button
+		container.appendChild(makeQuickPayButton(launcher, cfg.buttonLabel, qpScript.className));
+		// and the input element to receive the token
+		var tokenField = makeTokenField(cfg.tokenFieldName || 'qp-token');
+		container.appendChild(tokenField);
+		// attach return handler to launcher
+		launcher._params.onComplete = (function(_tokenField, doSubmit) {
+			return function(result) {
+				_tokenField.value = result.token;
+				doSubmit && _tokenField.form.submit();
+			};
+		})(tokenField, !cfg.noSubmit);
 	}
 
+	function makeQuickPayButton(launcher, text, className) {
+		var btn = document.createElement('button');
+		btn.innerHTML = text || 'Pay';
+		btn.className = className || '';
+		btn.addEventListener('click', (function(_l) {
+			return function(e) {
+				_l.open();
+				e.preventDefault();
+				return false;
+			};
+		})(launcher));
+		return btn;
+	}
+
+	function makeTokenField(name) {
+		var field = document.createElement('input');
+		field.type = 'hidden';
+		field.name = name;
+		return field;
+	}
+
+	// extract quickpay config object from attribute collection (camelcase the key names too)
 	function getQPConfigFromAttribs(attrs) {
 		var cfg = {}, rx = /^data-qp-(.+)/i, matches;
 		for (var i=0; i<attrs.length; i++) {
-			if (matches = attrs[i].name.match(rx)) cfg[matches[1].replace(/-([a-z])/g, function (g){return g[1].toUpperCase();})] = attrs[i].nodeValue;
+			if (matches = attrs[i].name.match(rx)) cfg[matches[1].replace(/-([a-z])/g, function (g){return g[1].toUpperCase();})] = attrs[i].value;
 		}
 		return cfg;
 	}

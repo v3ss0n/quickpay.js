@@ -9,23 +9,13 @@
 	<h1>PAYSBUY QuickPay</h1>
 	<p>Form based setup with no coding</p>
 
-
-
-	<form action="/my_payment_code">
-
-		<script src="quickpay.js" class="btn-quickpay" data-qp-key="pub_hrkK7qM6Can2vCsolp" data-qp-title="My Shop!" data-qp-description="1 item"></script>
-
+	<form method="GET" action="/my_payment_code">
+		<script src="quickpay.js" class="btn-quickpay" data-qp-image="http://pipsum.com/64x64.jpg" data-qp-key="pub_hrkK7qM6Can2vCsolp" data-qp-title="mywidgetshop.com" data-qp-description="2 Widgets @ ฿1,500" data-qp-amount=3000></script>
 	</form>
 
-
-
-	<form action="/my_payment_code">
-
-		<script src="quickpay.js" class="btn-quickpay" data-qp-key="pub_hrkK7qM6Can2vCsolp" data-qp-title="BEER TIME" data-qp-submit-label="OK, cheers!"></script>
-
+	<form method="GET" action="/my_payment_code">
+		<script src="quickpay.js" class="btn-quickpay" data-qp-image="http://emoji.fileformat.info/gemoji/beer.png" data-qp-key="pub_hrkK7qM6Can2vCsolp" data-qp-no-submit="true" data-qp-button-label="Pay (no submit)" data-qp-title="My Beer Fund" data-qp-submit-label="OK, cheers!" data-qp-description="Buy me a beer? Only 200 baht"></script>
 	</form>
-
-
 
 </body>
 </html>
