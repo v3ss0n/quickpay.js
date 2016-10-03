@@ -2,6 +2,10 @@
 
 	"use strict";
 
+	// polyfill for CustomEvent (IE)
+	!function(){function a(a,b){b=b||{bubbles:!1,cancelable:!1,detail:void 0};var c=document.createEvent("CustomEvent");return c.initCustomEvent(a,b.bubbles,b.cancelable,b.detail),c}return"function"!=typeof window.CustomEvent&&(a.prototype=window.Event.prototype,void(window.CustomEvent=a))}();
+
+
 	var QuickPay = (function() {
 
 		var
@@ -36,6 +40,7 @@
 			this._iframe = false;
 			this._wrapper = false;
 			this._checkoutWindow = false;
+			this._container = params.container;
 			this._prepareCheckout();
 		}
 
@@ -97,6 +102,7 @@
 				for (var st in transf) this._iframe.style[transf[st]+'ransform'] = 'scale(1)'; 
 				this._iframe.style.opacity = '1';
 				this._listenToCheckout();
+				(this._container || document).dispatchEvent(_event('qp_show', {bubbles:!0,cancelable:!1,detail:void 0}));
 			},
 
 			_hideCheckout: function() {
@@ -109,6 +115,7 @@
 				this._iframe.style.opacity = '0';
 				this._wrapper.style.opacity = '0';
 				this._active = false;
+				(this._container || document).dispatchEvent(_event('qp_hide', {bubbles:!0,cancelable:!1,detail:void 0}));
 			},
 
 			_prepareWrapper: function() {
@@ -186,6 +193,11 @@
 	window.Paysbuy = window.Paysbuy || {};
 	window.Paysbuy.QuickPay = QuickPay;
 
+	function _event(name, detail) {
+		return new CustomEvent(name, detail || {});
+	}
+
+
 	// check if this script is being used as a quickpay button generator
 	var qpScript = (function() {
 		var scripts = document.getElementsByTagName('script');
@@ -196,21 +208,25 @@
 		// create a launcher
 		var
 			cfg = getQPConfigFromAttribs(qpScript.attributes), 
-			launcher = QuickPay.configure(cfg),
-			container = qpScript.parentNode
+			container = qpScript.parentNode,
+			launcher
 		;
+		cfg.container = container;
+		launcher = QuickPay.configure(cfg);
+		
 		// create quickpay button
 		container.appendChild(makeQuickPayButton(launcher, cfg.buttonLabel, qpScript.className));
 		// and the input element to receive the token
 		var tokenField = makeTokenField(cfg.tokenFieldName || 'qp-token');
 		container.appendChild(tokenField);
 		// attach return handler to launcher
-		launcher._params.onComplete = (function(_tokenField, doSubmit) {
+		launcher._params.onComplete = (function(_tokenField, _container, doSubmit) {
 			return function(result) {
 				_tokenField.value = result.token;
+				_tokenField.dispatchEvent(_event('qp_token_received', {bubbles:!0,cancelable:!0,detail:{token: result.token}}));
 				doSubmit && _tokenField.form.submit();
 			};
-		})(tokenField, !cfg.noSubmit);
+		})(tokenField, container, !cfg.noSubmit);
 	}
 
 	function makeQuickPayButton(launcher, text, className) {

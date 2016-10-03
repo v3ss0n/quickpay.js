@@ -30,6 +30,9 @@
 			alert('Token is: '+result.token);
 		}
 
+		document.addEventListener('qp_show', function() { console.log("QuickPay shown"); });
+		document.addEventListener('qp_hide', function() { console.log("QuickPay hidden"); });
+
 	</script>
 </body>
 </html>

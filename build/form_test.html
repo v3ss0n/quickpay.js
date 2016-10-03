@@ -9,13 +9,25 @@
 	<h1>PAYSBUY QuickPay</h1>
 	<p>Form based setup with no coding</p>
 
-	<form method="GET" action="/my_payment_code">
+	<form id="f1" method="GET" action="/my_payment_code">
 		<script src="quickpay.js" class="btn-quickpay" data-qp-image="http://pipsum.com/64x64.jpg" data-qp-key="pub_hrkK7qM6Can2vCsolp" data-qp-title="mywidgetshop.com" data-qp-description="2 Widgets @ ฿1,500" data-qp-amount=3000></script>
 	</form>
 
-	<form method="GET" action="/my_payment_code">
+	<form id="f2" method="GET" action="/my_payment_code">
 		<script src="quickpay.js" class="btn-quickpay" data-qp-image="http://emoji.fileformat.info/gemoji/beer.png" data-qp-key="pub_hrkK7qM6Can2vCsolp" data-qp-no-submit="true" data-qp-button-label="Pay (no submit)" data-qp-title="My Beer Fund" data-qp-submit-label="OK, cheers!" data-qp-description="Buy me a beer? Only 200 baht"></script>
 	</form>
+
+	<script src="jquery.js"></script>
+	<script type="text/javascript">
+		
+	$(document).on('qp_show', function() { console.log('a quickpay was shown'); });
+	$('#f1').on('qp_show', function() { console.log('quickpay shown form 1'); });
+	$('#f2').on('qp_show', function() { console.log('quickpay shown form 2'); });
+	$('#f1').on('qp_hide', function() { console.log('quickpay hidden form 1'); });
+	$('#f2').on('qp_hide', function() { console.log('quickpay hidden form 2'); });
+	$('#f2').on('qp_token_received', function(e) { console.log(e, e.originalEvent.detail.token); }); //'token received was:'+e.detail.token)});
+		
+	</script>
 
 </body>
 </html>
