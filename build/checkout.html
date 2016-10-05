@@ -54,16 +54,17 @@
 		
 		<p class="qp-desc"></p>
 		<form>
-			<input type="text" name="email" placeholder="Email"><br>
-			<input type="text" name="card_number" placeholder="Card number" maxlength="16"><br>
-			<input type="text" name="card_expiry_date" placeholder="Expiry date"><br>
-			<input type="text" name="card_cvn" placeholder="CVV"><br><br>
+			<input type="text" id="email" name="email" placeholder="Email"><br>
+			<input type="text" id="card_number" name="card_number" placeholder="Card number" maxlength="19"><br>
+			<input type="text" id="card_expiry_date" name="card_expiry_date" placeholder="Expiry date"><br>
+			<input type="text" id="card_cvn" name="card_cvn" placeholder="CVV"><br><br>
 			<input class="qp-btnpay" type="button" value=""><span class="qp-loading">Processing...</span>
 		</form>
 	</div>
 
 	<script src="https://dev.mob.paysbuy.com/wallet/demopay/assets/paysbuy.min.js"></script>
 	<script src="jquery.js"></script>
+	<script src="jquery.creditCardValidator.min.js"></script>
 	<script src="checkout.js"></script>
 
 </body>
