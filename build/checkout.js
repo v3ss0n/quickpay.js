@@ -43,7 +43,6 @@
 		btnPay.on('click', pay);
 		cover.add(btnClose).on('click', closeCheckout);
 		$(document).on('keyup', closeOnEsc);
-		// TODO - add class changing on card number field based on card type (visa etc.)
 		fld_cardNum.validateCreditCard(setCardTypeOnField);
 	}
 
@@ -126,8 +125,24 @@
 			delete data.card_cvn;
 		}
 
+		// make sure Expiry date is in correct format if it's there
+		if (data.card_expiry_date) data.card_expiry_date = sanitiseExpiry(data.card_expiry_date);
+
 		data.key = pbKey;
 		return data;
+	}
+
+	function sanitiseExpiry(dt) {
+		console.log('REGEXP is '+REGEXP_EXPIRY);
+		console.log('Date is '+dt);
+		var
+			matches = REGEXP_EXPIRY.exec(dt),
+			mm = matches[1],
+			yyyy = matches[2]
+		;
+		if (yyyy.length==2) yyyy = '20'+yyyy;
+		REGEXP_EXPIRY.lastIndex = 0; // reset regex - IMPORTANT
+		return mm+'-'+yyyy;
 	}
 
 	function returnSuccess(token) {
