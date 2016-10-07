@@ -5,7 +5,7 @@ function Tokenizer(Paysbuy, $) {
 	this.process = function(data, callback) {
 		// make sure Expiry date is in correct format if it's there
 		if (data.card_expiry_date) data.card_expiry_date = _sanitiseExpiry(data.card_expiry_date);
-		Paysbuy.setPublicKey(tokenizer.key);
+		Paysbuy.setPublicKey(this.key);
 		Paysbuy.createToken(data, callback);
 	};
 
