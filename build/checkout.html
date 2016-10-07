@@ -66,7 +66,19 @@
 	<script src="jquery.js"></script>
 	<script src="jquery.creditCardValidator.min.js"></script>
 	<script src="emitter.js"></script>
+	<script src="ui.js"></script>
+	<script src="validator.js"></script>
+	<script src="tokenizer.js"></script>
 	<script src="checkout.js"></script>
+	<script>
+		
+	var ui = new Ui($);
+	var validator = new Validator($);
+	var tokenizer = new Tokenizer(Paysbuy, $);
+
+	(new CheckoutApp(ui, validator, tokenizer)).init();
+
+	</script>
 
 </body>
 </html>
