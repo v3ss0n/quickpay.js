@@ -36,18 +36,20 @@
 
 
 		function Launcher(params) {
-			this._params = _merge([{}, _defaults, params]);
-			this._iframe = false;
-			this._wrapper = false;
-			this._checkoutWindow = false;
-			this._container = params.container;
+			_merge(this, {
+				_params: _merge({}, _defaults, params),
+				_iframe: false,
+				_wrapper: false,
+				_checkoutWindow: false,
+				_container: params.container
+			});
 			this._prepareCheckout();
 		}
 
-		_merge([Launcher.prototype, {
+		_merge(Launcher.prototype, {
 
 			open: function(params) {
-				var _p = _merge([{}, this._params, params || {}]);
+				var _p = _merge({}, this._params, params || {});
 				this._sendConfigToCheckout(_p);
 				this._resultHandler = _p.onComplete;
 				this._active = true;
@@ -142,13 +144,13 @@
 				var styles = {}, st, iframe;
 				var transf = ['t', 'webkitT', 'MozT', 'msT', 'OT'];
 				for (st in transf) styles[transf[st]+'ransform'] = 'scale(0.9)'; 
-				_merge([styles, {
+				_merge(styles, {
 					width: '100%',
 					height: '100%',
 					border: 'none',
 					margin: '0',
 					opacity: '0'
-				}]);
+				});
 				iframe = this._createStyledElement('iframe', styles);
 				var transi = ['', '-webkit-', '-moz-', '-ms-', '-o-'];
 				for (st in transi) iframe.style.setProperty(transi[st]+'transition', '300ms opacity ease, '+transi[st]+'transform 300ms');
@@ -170,10 +172,13 @@
 				return elem;
 			}
 
-		}]);
+		});
 
-		function _merge(objArray) {
-			var newObj = objArray[0];
+		function _merge() {
+			var
+				objArray = Array.prototype.slice.call(arguments),
+				newObj = objArray[0]
+			;
 			for (var objKey in objArray) {
 				if (objKey) for (var attr in objArray[objKey]) newObj[attr]=objArray[objKey][attr];
 			}
