@@ -1,6 +1,6 @@
-"use strict";
-
 function Tokenizer(Paysbuy, $) {
+
+	"use strict";
 
 	this.process = function(data, callback) {
 		// make sure Expiry date is in correct format if it's there

@@ -1,6 +1,6 @@
-"use strict:;"
-
 function Validator($) {
+
+	"use strict";
 
 	this.run = function(checks) {
 		// run validation check(s) - return true if all passing, or an array of errored fields if not

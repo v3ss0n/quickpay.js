@@ -1,6 +1,6 @@
-"use strict";
-
 function Ui($) {
+
+	"use strict";
 
 	var
 		KEYCODE_ESC = 27,

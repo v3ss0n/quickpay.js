@@ -1,6 +1,6 @@
-"use strict";
-
 function CheckoutApp(ui, validator, tokenizer) {
+
+	"use strict";
 
 	var 
 		QP_CLOSEMESSAGE = 'close',
