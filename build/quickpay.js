@@ -65,7 +65,11 @@
 			},
 
 			_sendConfigToCheckout: function(params) {
-				this._checkoutWindow.postMessage(JSON.stringify(params), _QPSERVER + _QPPATH);
+				try {
+					this._checkoutWindow.postMessage(JSON.stringify(params), _QPSERVER + _QPPATH);
+				} catch(e) {
+
+				}
 			},
 
 			_listenToCheckout: function() {

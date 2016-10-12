@@ -53,7 +53,7 @@
 		</h1>
 		
 		<p class="qp-desc"></p>
-		<form>
+		<form action="http://paysbuy.test:3000/otherpage.html" method="get">
 			<input type="text" id="email" name="email" placeholder="Email"><br>
 			<input type="text" id="card_number" name="card_number" placeholder="Card number" maxlength="19"><br>
 			<input type="text" id="card_expiry_date" name="card_expiry_date" placeholder="Expiry date"><br>
@@ -69,14 +69,16 @@
 	<script src="ui.js"></script>
 	<script src="validator.js"></script>
 	<script src="tokenizer.js"></script>
+	<script src="windowmessenger.js"></script>
 	<script src="checkout.js"></script>
 	<script>
 		
 	var ui = new Ui($);
 	var validator = new Validator($);
 	var tokenizer = new Tokenizer(Paysbuy, $);
+	var windowMessenger = new WindowMessenger(window);
 
-	(new CheckoutApp(ui, validator, tokenizer)).init();
+	(new CheckoutApp(ui, validator, tokenizer, windowMessenger)).init();
 
 	</script>
 

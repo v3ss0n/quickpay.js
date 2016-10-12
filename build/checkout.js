@@ -1,4 +1,4 @@
-function CheckoutApp(ui, validator, tokenizer) {
+function CheckoutApp(ui, validator, tokenizer, windowMessenger) {
 
 	"use strict";
 
@@ -8,7 +8,7 @@ function CheckoutApp(ui, validator, tokenizer) {
 	;
 
 	this.init = function() {
-		_listenToParent();
+		windowMessenger.parentMessageHandler = _respondToParentMessage;
 		ui.init();
 		ui.on('requestPay', _pay);
 		ui.on('requestClose', _parentCloseCheckout);
@@ -27,7 +27,8 @@ function CheckoutApp(ui, validator, tokenizer) {
 	function _returnSuccess(token) {
 		var details = ui.getFormData();
 		details.token = token;
-		_messageParent(JSON.stringify(details));
+		windowMessenger.messageParent(JSON.stringify(details));
+		//////$('form').submit();
 	}
 
 	function _receiveTokenizationResult(status, response) {
@@ -40,30 +41,12 @@ function CheckoutApp(ui, validator, tokenizer) {
 	}
 
 	function _parentCloseCheckout() {
-		_messageParent(QP_CLOSEMESSAGE);
+		windowMessenger.messageParent(QP_CLOSEMESSAGE);
 	}
 
-
-	function _messageParent(msg) {
-		parent.window.postMessage(msg, parentDomain);
-	}
-
-	function _listenToParent() {
-		window.removeEventListener("message", _parentListener);
-		window.addEventListener("message", _parentListener, false);
-	}
-
-
-	function _parentListener(ev) {
-		var d;
-		if (ev.data) {
-			if (!parentDomain) parentDomain = ev.origin;
-			if (parentDomain == ev.origin) {
-				d = JSON.parse(ev.data);
-				tokenizer.key = d.key;
-				ui.setupForm(d);
-			}
-		}
+	function _respondToParentMessage(data) {
+		tokenizer.key = data.key;
+		ui.setupForm(data);
 	}
 
 }
