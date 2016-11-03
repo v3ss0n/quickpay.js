@@ -32,6 +32,8 @@
 
 				QP_CLOSEMESSAGE = 'close',
 
+				ANIM_TIME = 300,
+
 				STYLE_IFRAME = {
 					width: '100%',
 					height: '100%',
@@ -39,7 +41,7 @@
 					margin: '0',
 					opacity: '0',
 					transform: 'scale(0.9)',
-					transition: '300ms opacity ease, transform 300ms'
+					transition: ANIM_TIME+'ms opacity ease, transform '+ANIM_TIME+'ms'
 				},
 				STYLE_WRAPPER = {
 					backgroundColor: 'rgba(0,0,0,0.75)',
@@ -53,7 +55,7 @@
 					overflowX: 'hidden',
 					width: '100%',
 					height: '100%',
-					transition: '300ms opacity ease, transform 300ms'
+					transition: ANIM_TIME+'ms opacity ease, transform '+ANIM_TIME+'ms'
 				}
 
 			;
@@ -137,7 +139,7 @@
 				_hideCheckout: function() {
 					setTimeout((function(_this) { return function() {
 						_this._wrapper.style.visibility = 'hidden';
-					};})(this), 300);
+					};})(this), ANIM_TIME*1.2);
 					document.body.style.overflow = '';
 					this._styleElement(this._iframe, { transform: 'scale(0.9)', opacity: 0 });
 					this._wrapper.style.opacity = '0';
