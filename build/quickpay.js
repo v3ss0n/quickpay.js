@@ -14,7 +14,7 @@
 
 			var
 
-				_defaults = {
+				DEFAULT_PARAMS = {
 					key						: '',
 					tokenHandler	: undefined,
 					image					: '',
@@ -26,13 +26,13 @@
 					currency			: 'THB'
 				},
 
-				_QPSERVER = 'http://localhost:3000',
-				_QPPATH = '',
-				_QPPAGE = 'checkout.html',
+				QPSERVER = 'http://localhost:3000',
+				QPPATH = '',
+				QPPAGE = 'checkout.html',
 
-				_QP_CLOSEMESSAGE = 'close',
+				QP_CLOSEMESSAGE = 'close',
 
-				_STYLE_IFRAME = {
+				STYLE_IFRAME = {
 					width: '100%',
 					height: '100%',
 					border: 'none',
@@ -41,7 +41,7 @@
 					transform: 'scale(0.9)',
 					transition: '300ms opacity ease, transform 300ms'
 				},
-				_STYLE_WRAPPER = {
+				STYLE_WRAPPER = {
 					backgroundColor: 'rgba(0,0,0,0.75)',
 					border: 'none',
 					opacity: '0',
@@ -65,7 +65,7 @@
 
 			function Launcher(params) {
 				_merge(this, {
-					_params: _merge({}, _defaults, params),
+					_params: _merge({}, DEFAULT_PARAMS, params),
 					_iframe: false,
 					_wrapper: false,
 					_checkoutWindow: false,
@@ -94,7 +94,7 @@
 
 				_sendConfigToCheckout: function(params) {
 					try {
-						this._checkoutWindow.postMessage(JSON.stringify(params), _QPSERVER + _QPPATH);
+						this._checkoutWindow.postMessage(JSON.stringify(params), QPSERVER + QPPATH);
 					} catch(e) {}
 				},
 
@@ -110,12 +110,12 @@
 							if (!_this._active) return false;
 
 							// check message is coming from checkout
-							if (!ev.origin || (ev.origin != _QPSERVER)) {
+							if (!ev.origin || (ev.origin != QPSERVER)) {
 								return false;
 							}
 
 							// receiving token or being asked to hide?
-							if (ev.data == _QP_CLOSEMESSAGE) {
+							if (ev.data == QP_CLOSEMESSAGE) {
 								return _this._hideCheckout();
 							} else {
 								if (_this._resultHandler) _this._resultHandler(JSON.parse(ev.data));
@@ -146,14 +146,14 @@
 				},
 
 				_prepareWrapper: function() {
-					var wrapper = this._createStyledElement('div', _STYLE_WRAPPER);
+					var wrapper = this._createStyledElement('div', STYLE_WRAPPER);
 					document.body.appendChild(wrapper);
 					return wrapper;
 				},
 
 				_prepareIframe: function() {
-					var iframe = this._createStyledElement('iframe', _STYLE_IFRAME);
-					iframe.src = _QPSERVER + _QPPATH + '/' + _QPPAGE;
+					var iframe = this._createStyledElement('iframe', STYLE_IFRAME);
+					iframe.src = QPSERVER + QPPATH + '/' + QPPAGE;
 					// capture the contentWindow object of the frame when it has loaded
 					iframe.addEventListener("load", (function(_this) {
 						return function(e) { 
