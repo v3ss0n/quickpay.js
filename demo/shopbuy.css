@@ -1,0 +1,222 @@
+body {
+	background: url(img/shopbuymockbgtile.png);
+	background-repeat: repeat-x;
+}
+
+.container {
+	background-image: url(img/shopbuymock.png);
+	background-repeat: no-repeat;
+	background-position: 50% 0;
+	height:1000px;
+	width: 100%;
+	margin: 0;
+	transition: width 0.5s;
+	position: relative;
+}
+
+.themer {
+	position: fixed;
+	top: -20px;
+	left: 0;
+	background: #fff;
+	width: 156px;
+	padding: 0;
+	border-radius: 0 5px 5px 0;
+	box-shadow: 0 0 10px rgba(0,0,0,0.5);
+	margin: 0;
+	height: 56px;
+	transition: opacity 0.2s;
+	opacity: 0.25;
+}
+
+.themer:hover {
+	opacity:1;
+}
+
+.select-wrapper input.select-dropdown {
+	border: none;
+}
+
+.pay-page {
+	font-family: Montserrat;
+}
+
+body.complete .container {
+	background-image: url(img/shopbuymock2.png);
+}
+
+body.complete .pay-page {
+	display: none;
+}
+
+.pay-complete {
+	display: none;
+}
+body.complete .pay-complete {
+	display: block;
+}
+
+
+body.sideopen .container {
+	width: calc(100% - 500px);
+}
+
+.sidebar {
+	height:100%;
+	background: #fff;
+	width:0;
+	position:fixed;
+	top:0;
+	right:0;
+	transition: width 0.5s, box-shadow 1s;
+	color: #6f6f79;
+	white-space: nowrap;
+	z-index: 1000;
+	border-left: none;
+	box-shadow: none;
+}
+
+body.sideopen .sidebar {
+	width: 500px;
+	box-shadow: 0 0 16px rgba(0,0,0,0.5);
+	overflow-y: auto;
+}
+
+.handle {
+	position: fixed;
+	transform: translateZ(0); /* fix for webkit bug */
+}
+
+.handle a {
+	height: 40px;
+	width: 40px;
+	position: absolute;
+	padding: 0;
+	line-height: 40px;
+	left: -40px;
+	border-radius: 5px 0 0 5px;
+	top: 4px;
+	box-shadow: -2px 0px 5px 2px rgba(0,0,0,0.1);
+}
+.handle i {
+	font-size: 26px !important;
+	padding: 0 !important;
+	opacity: 0.5;
+	transition: transform 1s;
+}
+body.sideopen .handle i {
+	transform: rotate(180deg);
+}
+
+.content {
+	width: 920px;
+	position: absolute;
+	left: 50%;
+	margin-left: -460px;
+}
+
+.btn {
+	font-family: Montserrat;
+	font-size: 14px;
+	line-height: 14px;
+	width: 248px;
+	padding: 0;
+	position: absolute;
+	top: 764px;
+	left: 228px;
+}
+
+.btn i {
+	padding-right:9px;
+	font-size:15px;
+}
+
+.qp-wrapper {
+	transition: width 0.5s;
+	z-index: 999 !important;
+}
+
+body.sideopen .qp-wrapper {
+	width: calc(100% - 500px) !important;
+}
+
+
+.event-head {
+	font-family: Montserrat;
+	font-size: 11px;
+	color: #6f6f79;
+	height:48px;
+	line-height: 48px;
+	padding-left: 18px;
+	padding-right: 18px;
+	border-bottom: 1px solid #d3d3d4;
+	font-weight: bold;
+	transition: height 0.8s, border-bottom-width 0.8s, opacity 0.8s;
+	overflow: hidden;
+}
+
+.event-head-main {
+	color: #f99c43;
+	font-size: 13px;
+	text-transform: uppercase;
+}
+
+.event-info {
+	font-weight: normal;
+}
+
+.event-head .inf {
+	float: right;
+	font-size: 20px;
+	color: #ccc;
+	padding-top: 12px;
+	opacity: 0;
+	transition: opacity 0.5s, color 0.25s;
+	cursor: pointer;
+}
+
+.event-head i:hover {
+	color: #666;
+}
+
+body.sideopen .event-head i {
+	opacity: 1;
+}
+
+.event-code {
+	font-size: 11px;
+	transition: height 0.8s, border-bottom-width 0.8s, opacity 0.8s;
+	overflow: hidden;
+}
+
+.event-space {
+	height:200px;
+}
+
+.event-code .hljs {
+	padding: 1.5em;
+	font-family: 'Source Code Pro', monospace;
+}
+
+.event-code pre {
+	margin: 0;
+}
+
+.sidebar.s1 .event-info, .sidebar:not(.s1) .ev1, .sidebar:not(.s2) .ev2, .sidebar:not(.s3) .ev3
+ {
+	height: 0;
+	border-bottom-width: 0;
+	opacity: 0;
+}
+
+.btn-restart {
+	top: 266px;
+	left: 26px;
+}
+
+.msg {
+	position: absolute;
+	top:124px;
+	left: 24px;
+	color: #6f6f79;
+}

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Checkout</title>
+	<script src="https://use.fontawesome.com/8dd4ea9d02.js"></script>
+	<link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/css/materialize.min.css">
+	<link rel="stylesheet" href="checkout.css">
+	<style id="customCSS"></style>
+</head>
+<body style="display:none;">
+	<div class="qp-cover"></div>
+	<div class="qp-checkout container">
+
+		<div class="qp-infobox">
+			
+			<div class="qp-btnclose"><i class="fa fa-times-circle" aria-hidden="true"></i></div>
+
+			<img class="qp-img left" width="74" height="74">
+
+			<h1 class="qp-title"></h1>
+
+			
+			<div class="qp-desc"></div>
+
+		</div>
+
+		<div class="qp-tabs">
+			<div class="col s12">
+				<ul class="tabs">
+					<li class="tab col s3"><a href="#qp-form-card">Card</a></li>
+					<li class="tab col s3"><a href="#qp-form-wavemoney">Wave Money</a></li>
+				</ul>
+			</div>
+		</div>
+
+		<form>
+
+			<div id="qp-form-card" class="qp-methodpage" style="display:none;">
+
+				<div class="row" id="email_container">
+					<div class="input-field col s12">
+						<i class="fa fa-envelope-o prefix" aria-hidden="true"></i>
+						<input id="email" name="email" type="email">
+						<label for="email">Email Address</label>
+					</div>		
+				</div>
+			
+				<div class="row">
+					<div class="input-field col s12">
+						<i class="fa fa-credit-card prefix card-preview" aria-hidden="true"></i>
+						<input id="card_number" name="card_number" maxlength="22" type="text">
+						<label for="card_number">Card Number</label>
+					</div>		
+				</div>
+
+				<div class="row">
+					<div class="input-field col s6">
+						<i class="fa fa-calendar prefix" aria-hidden="true"></i>
+						<input id="card_expiry_date" name="card_expiry_date" type="text">
+						<label for="card_expiry_date">Expiry</label>
+					</div>		
+					<div class="input-field col s6">
+						<i class="fa fa-lock prefix" aria-hidden="true"></i>
+						<input id="card_cvn" name="card_cvn" maxlength="19" type="text">
+						<label for="card_cvn">CVV</label>
+					</div>		
+				</div>
+
+				<div class="row" id="name_container">
+					<div class="input-field col s12">
+						<i class="fa fa-user prefix" aria-hidden="true"></i>
+						<input id="name" name="name" type="text">
+						<label for="name">Name on card</label>
+					</div>		
+				</div>
+
+				<div class="row" id="phone_container">
+					<div class="input-field col s12" id="phone_container">
+						<i class="fa fa-mobile prefix" aria-hidden="true"></i>
+						<input id="phone" name="phone" type="text">
+						<label for="phone">Phone</label>
+					</div>		
+				</div>
+
+			</div>
+
+
+			<div id="qp-form-wavemoney" class="qp-methodpage">
+
+					<div class="row">
+						<div class="input-field col s12">
+							<i class="fa fa-mobile prefix" aria-hidden="true"></i>
+							<input id="wave_id" name="wallet_id" type="text">
+							<input id="wave_brand" name="wallet_brand" type="hidden" value="WaveMoney">
+							<label for="wave_id">Phone number</label>
+						</div>
+					</div>		
+
+
+			</div>
+
+
+
+			<input class="qp-btnpay waves-effect waves-light btn orange" type="submit" value="">
+
+			<div class="qp-loading">
+				
+				<div class="preloader-wrapper small active">
+					<div class="spinner-layer">
+						<div class="circle-clipper left">
+							<div class="circle"></div>
+						</div>
+						<div class="gap-patch">
+							<div class="circle"></div>
+						</div>
+						<div class="circle-clipper right">
+							<div class="circle"></div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</form>
+	</div>
+
+	<script src="https://dev-vault.paysbuy.com/client/paysbuy.js"></script>
+	<script src="vendor/jquery.js"></script>
+	<script src="vendor/jquery.creditCardValidator.min.js"></script>
+	<script src="vendor/emitter.js"></script>
+	<script src="checkout.all.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/js/materialize.min.js"></script>
+
+	<script>
+		
+	var ui = new Ui($);
+	var validator = new Validator($);
+	var tokenizer = new Tokenizer(Paysbuy, $);
+	var windowMessenger = new WindowMessenger(window);
+
+	(new CheckoutApp(ui, validator, tokenizer, windowMessenger)).init();
+
+	</script>
+
+</body>
+</html>

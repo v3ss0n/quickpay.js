@@ -1,0 +1,285 @@
+html {
+	font-size: 11px;
+}
+.qp-infobox {
+	height: 106px;
+	padding: 10px;
+	background: #fff;
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+}
+.qp-tabs {
+	margin-bottom: 0;
+	box-shadow: inset 0px 10px 4px -8px rgba(0,0,0,0.15);
+}
+.qp-tabs, .qp-tabs .tabs {
+	height: 32px;
+}
+.qp-tabs .tabs {
+	background: transparent;
+	font-size: 10px;
+}
+.qp-tabs .tabs .tab {
+	line-height: 32px;
+	height: 32px;
+	text-transform: none;
+}
+.qp-tabs .tab a, .qp-tabs .tab.disabled a {
+	color: #b8b8c0;
+	font-weight: normal;
+}
+.qp-tabs .tab a.active, .qp-tabs .tab a:hover {
+	color: #1375a9;
+}
+.qp-tabs .tabs .indicator {
+	background-color: #1375a9;
+}
+.qp-tabs .tab a.active {
+	font-weight: bold;
+}
+
+.qp-title {
+	line-height: 20px;
+	font-size: 16px;
+	margin: 0;
+	font-weight: bold;
+	color: #1b77a4;
+	padding-top: 23px;
+	padding-left:94px;
+}
+.qp-desc {
+	line-height: 20px;
+	font-size: 12px;
+	color: #6f6f79; 
+	padding-left:94px;
+}
+.no-image .qp-desc, .no-image .qp-title {
+	padding-left:20px;
+}
+.qp-btnpay {
+	width: 100%;
+	border-radius: 0 0 5px 5px;
+	font-size: 14px;
+	box-shadow: none;
+}
+.qp-btnpay input {
+	width:100%;
+}
+.qp-cover {
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	background-image: url(logo.png);
+	background-repeat: no-repeat;
+	background-position-x: calc(100% - 20px);
+	background-position-y: calc(100% - 16px);
+	opacity: 0.4;
+}
+.qp-checkout {
+	position: absolute;
+	left: 50%;
+	top: 16%;
+	margin-left: -151px;
+	width: 302px;
+	background: #f2f2f2;
+	border-radius: 7px;
+	box-shadow: 0 17px 16px -10px rgba(0,0,0,0.25);
+	font-family: 'Montserrat', sans-serif;
+}
+.qp-checkout .row {
+	margin-bottom: 0;
+}
+.qp-checkout .input-field {
+	margin-top: 0;
+}
+.qp-checkout form {
+	background: #fff;
+	border-bottom-left-radius: 7px;
+	border-bottom-right-radius: 7px;
+}
+.qp-methodpage {
+	padding: 20px 32px 22px 24px;
+}
+.qp-img {
+	border-radius: 50%;
+	vertical-align: middle;
+	margin-top: 8px;
+	margin-left: 10px;
+}
+.qp-btnclose {
+	position: absolute;
+	top: 8px;
+	right: 8px;
+	cursor: pointer;
+	width: 22px;
+	height: 22px;
+	line-height: 18px;
+	text-align: center;
+	color: #c4c4c8;
+}
+.qp-btnclose i {
+	font-size: 22px;
+	line-height: 22px;
+}
+element {
+	width: 18px;
+	height: 18px;
+	color: #fff;
+	background-color: #c4c4c8;
+	border-radius: 50%;
+	font-size: 14px;
+	line-height: 18px;
+	text-align: center;
+	font-weight: bold;
+}
+.qp-loading {
+	display: none;
+	position: absolute;
+	bottom: 6px;
+	left: 10px;
+	z-index:100;
+}
+
+.qp-loading .spinner-layer {
+	border-color: #fff;
+}
+
+.qp-loading .preloader-wrapper.small {
+	width:16px;
+	height:16px;
+}
+
+form {
+	padding-top: 1rem;
+}
+.card-preview[data-cardtype=amex]:before {
+	content: "\f1f3";
+}
+.card-preview[data-cardtype^=diners_club]:before {
+	content: "\f24c";
+}
+.card-preview[data-cardtype^=visa]:before {
+	content: "\f1f0";
+}
+.card-preview[data-cardtype=mastercard]:before {
+	content: "\f1f1";
+}
+.card-preview[data-cardtype=discover]:before {
+	content: "\f1f2";
+}
+.card-preview[data-cardtype=jcb]:before {
+	content: "\f24b";
+}
+.prefix {
+	color: #9ca2ab;
+}
+.input-field .prefix {
+	position: absolute;
+	width: 2.5rem;
+	font-size: 18px;
+	transition: color .2s;
+	text-align: center;
+	/* vertical-align: middle; */
+	margin-top: 6px;
+}
+
+
+/* label color */
+.input-field label {
+	color: #6f6f79;
+}
+/* label focus color */
+.input-field input[type=text]:focus + label, .input-field input[type=email]:focus + label {
+	color: #a6a6ac;
+}
+/* label underline focus color */
+.input-field input[type=text]:focus, .input-field input[type=email]:focus {
+	border-bottom: 1px solid #000;
+	box-shadow: none;
+}
+/* icon prefix focus color */
+.input-field .prefix, .input-field .prefix.active {
+	color: #0f72ae;
+}
+/* valid color */
+.input-field input[type=text].valid, .input-field input[type=email].valid {
+	border-bottom: 1px solid #d3d3d4;
+	box-shadow: none;
+}
+/* invalid color */
+.input-field input[type=text].invalid, .input-field input[type=email].invalid {
+	border-bottom: 1px solid #d00;
+	box-shadow: none;
+}
+.input-field input[type=text], .input-field input[type=email] {
+	border-bottom-color: #d3d3d4;
+}
+
+
+.input-field .prefix ~ input {
+	width: calc(100% - 2.75rem);
+}
+
+.input-field .prefix ~ input, .input-field .prefix ~ textarea, .input-field .prefix ~ label, .input-field .prefix ~ .validate ~ label, .input-field .prefix ~ .autocomplete-content {
+	margin-left: 2.75rem;
+}
+
+.input-field.col .prefix ~ label, .input-field.col .prefix ~ .validate ~ label {
+	width: calc(100% - 2.75rem - 1.5rem);
+}
+
+.input-field .prefix ~ label {
+	margin-left: 2.75rem;
+}
+
+
+.validation-fail {
+	-webkit-animation: shake 0.82s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+					animation: shake 0.82s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+	-webkit-transform: translate3d(0, 0, 0);
+					transform: translate3d(0, 0, 0);
+	-webkit-backface-visibility: hidden;
+					backface-visibility: hidden;
+	-webkit-perspective: 1000px;
+					perspective: 1000px;
+}
+
+@-webkit-keyframes shake {
+	10%, 90% {
+		-webkit-transform: translate3d(-1px, 0, 0);
+						transform: translate3d(-1px, 0, 0);
+	}
+	20%, 80% {
+		-webkit-transform: translate3d(2px, 0, 0);
+						transform: translate3d(2px, 0, 0);
+	}
+	30%, 50%, 70% {
+		-webkit-transform: translate3d(-4px, 0, 0);
+						transform: translate3d(-4px, 0, 0);
+	}
+	40%, 60% {
+		-webkit-transform: translate3d(4px, 0, 0);
+						transform: translate3d(4px, 0, 0);
+	}
+}
+
+@keyframes shake {
+	10%, 90% {
+		-webkit-transform: translate3d(-1px, 0, 0);
+						transform: translate3d(-1px, 0, 0);
+	}
+	20%, 80% {
+		-webkit-transform: translate3d(2px, 0, 0);
+						transform: translate3d(2px, 0, 0);
+	}
+	30%, 50%, 70% {
+		-webkit-transform: translate3d(-4px, 0, 0);
+						transform: translate3d(-4px, 0, 0);
+	}
+	40%, 60% {
+		-webkit-transform: translate3d(4px, 0, 0);
+						transform: translate3d(4px, 0, 0);
+	}
+}
