@@ -157,7 +157,6 @@ function Ui($) {
 	};
 
 	this.setupForm = function (d) {
-		console.log(d);
 		_cfg = d;
 		// any CSS?
 		all.hide();
