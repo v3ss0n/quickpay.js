@@ -91,6 +91,7 @@ function Ui($) {
 		$(document).on('keyup', _closeOnEsc);
 		all_inputs.on('blur', _validateOnBlur);
 		fld_cardNum.validateCreditCard(_handleValidatedCardNum);
+		fld_expiry.on('keyup change', _formatExpiry);
 		$('ul.tabs').tabs({ onShow: function onShow(e) {
 				_focusFirstField(e);
 			} });
@@ -103,6 +104,21 @@ function Ui($) {
 		card.card_type && fld_cardNum.val(_formatCardNumber(fld_cardNum.val(), card.card_type.name));
 		var diff = fld_cardNum.val().length - len;
 		card.card_type && fld_cardNum[0].setSelectionRange(pos + diff, pos + diff);
+	}
+
+	function _formatExpiry() {
+		var pos = fld_expiry[0].selectionStart,
+		    cur = fld_expiry.val(),
+		    len = cur.length;
+		len > 2 && fld_expiry.val(_formatMMYY(cur));
+		var diff = fld_expiry.val().length - len;
+		diff && fld_expiry[0].setSelectionRange(pos + diff, pos + diff);
+	}
+
+	function _formatMMYY(str) {
+		var sep = '/';
+		var result = str.replace(/\//g, '');
+		return result.slice(0, 2) + sep + result.slice(2);
 	}
 
 	function _setCustomCSS(css) {
