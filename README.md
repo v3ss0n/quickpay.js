@@ -3,6 +3,11 @@
 Quickpay.js allows you to instantly and easily add a checkout form to your website to allow your customers to make payments through PAYSBUY. It makes use of [Paysbuy.js](https://github.com/paysbuy/paysbuy.js), although you do not need to use that directly or include it in your site.
 
 
+## Demos
+
+The main demo for Quickpay can be found [here](https://paysbuy.github.io/quickpay.js/demo/). A further demo showing how Quickpay can be made to look like part of an existing page is also [available](https://paysbuy.github.io/quickpay.js/demo2/).
+
+
 
 ## How to use
 
