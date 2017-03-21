@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>Checkout</title>
+	<title>QuickPay</title>
 	<script src="https://use.fontawesome.com/8dd4ea9d02.js"></script>
 	<link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/css/materialize.min.css">
@@ -29,8 +29,8 @@
 		<div class="qp-tabs">
 			<div class="col s12">
 				<ul class="tabs">
-					<li class="tab col s3"><a href="#qp-form-card">Card</a></li>
-					<li class="tab col s3"><a href="#qp-form-wavemoney">Wave Money</a></li>
+					<li class="tab col s3"><a href="#qp-form-card" data-lang="tab_card"></a></li>
+					<li class="tab col s3"><a href="#qp-form-wavemoney" data-lang="tab_waveMoney"></a></li>
 				</ul>
 			</div>
 		</div>
@@ -43,7 +43,7 @@
 					<div class="input-field col s12">
 						<i class="fa fa-envelope-o prefix" aria-hidden="true"></i>
 						<input id="email" name="email" type="email">
-						<label for="email">Email Address</label>
+						<label for="email" data-lang="fld_email"></label>
 					</div>		
 				</div>
 			
@@ -51,7 +51,7 @@
 					<div class="input-field col s12">
 						<i class="fa fa-credit-card prefix card-preview" aria-hidden="true"></i>
 						<input id="card_number" name="card_number" maxlength="22" type="text">
-						<label for="card_number">Card Number</label>
+						<label for="card_number" data-lang="fld_card"></label>
 					</div>		
 				</div>
 
@@ -59,12 +59,12 @@
 					<div class="input-field col s6">
 						<i class="fa fa-calendar prefix" aria-hidden="true"></i>
 						<input id="card_expiry_date" name="card_expiry_date" type="text" maxlength="5">
-						<label for="card_expiry_date">Expiry MM/YY</label>
+						<label for="card_expiry_date" data-lang="fld_expiry"></label>
 					</div>		
 					<div class="input-field col s6">
 						<i class="fa fa-lock prefix" aria-hidden="true"></i>
 						<input id="card_cvn" name="card_cvn" maxlength="4" type="text">
-						<label for="card_cvn">CVV</label>
+						<label for="card_cvn" data-lang="fld_cvv"></label>
 					</div>		
 				</div>
 
@@ -72,7 +72,7 @@
 					<div class="input-field col s12">
 						<i class="fa fa-user prefix" aria-hidden="true"></i>
 						<input id="name" name="name" type="text">
-						<label for="name">Name on card</label>
+						<label for="name" data-lang="fld_name"></label>
 					</div>		
 				</div>
 
@@ -80,7 +80,7 @@
 					<div class="input-field col s12" id="phone_container">
 						<i class="fa fa-mobile prefix" aria-hidden="true"></i>
 						<input id="phone" name="phone" type="text">
-						<label for="phone">Phone</label>
+						<label for="phone" data-lang="fld_phone"></label>
 					</div>		
 				</div>
 
@@ -94,7 +94,7 @@
 							<i class="fa fa-mobile prefix" aria-hidden="true"></i>
 							<input id="wave_id" name="wallet_id" type="text">
 							<input id="wave_brand" name="wallet_brand" type="hidden" value="WaveMoney">
-							<label for="wave_id">Phone number</label>
+							<label for="wave_id" data-lang="fld_waveId"></label>
 						</div>
 					</div>		
 
@@ -134,7 +134,7 @@
 
 	<script>
 		
-	var ui = new Ui($);
+	var ui = new Ui($, Lang);
 	var validator = new Validator($);
 	var tokenizer = new Tokenizer(Paysbuy, $);
 	var windowMessenger = new WindowMessenger(window);

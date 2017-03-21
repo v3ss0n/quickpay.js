@@ -20,7 +20,7 @@
 				onTokenReceived: undefined,
 				image: '',
 				locale: 'en-GB',
-				submitLabel: 'Pay {amount}',
+				submitLabel: undefined,
 				title: '',
 				description: '',
 				amount: 0,
@@ -32,6 +32,7 @@
 				noSubmit: false,
 				payMethods: 'card',
 				payUrl: undefined,
+				eventContainer: undefined,
 				containerId: undefined
 			},
 			    QPSERVER = 'https://paysbuy.github.io',
@@ -42,36 +43,7 @@
 			    QP_TOKENIZEEND = 'qp_tokenize_end',
 			    QP_SHOW = 'qp_show',
 			    QP_HIDE = 'qp_hide',
-			    QP_TOKENRECEIVED = 'qp_token_received',
-			    ANIM_TIME = 300,
-			    STYLE_IFRAME = {
-				width: '100%',
-				height: '100%',
-				border: 'none',
-				margin: '0'
-			},
-			    STYLE_IFRAME_POPUP = _merge({
-				opacity: '0',
-				transform: 'scale(0.9)',
-				transition: ANIM_TIME + 'ms opacity ease, transform ' + ANIM_TIME + 'ms'
-			}, STYLE_IFRAME),
-			    STYLE_WRAPPER = {
-				border: 'none',
-				opacity: '0',
-				visibility: 'hidden',
-				zIndex: '99999',
-				left: '0',
-				top: '0',
-				position: 'fixed',
-				overflowX: 'hidden',
-				width: '100%',
-				height: '100%',
-				transition: ANIM_TIME + 'ms opacity ease, transform ' + ANIM_TIME + 'ms'
-			},
-			    STYLE_WRAPPER_GREY = _merge({
-				backgroundColor: 'rgba(0,0,0,0.75)'
-			}, STYLE_WRAPPER),
-			    CLASS_WRAPPER = 'qp-wrapper';
+			    QP_TOKENRECEIVED = 'qp_token_received';
 
 			function configure() {
 				var params = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
@@ -86,7 +58,7 @@
 					_params: _merge({}, DEFAULT_PARAMS, params),
 					_checkoutPageHolder: false,
 					_checkoutWindow: false,
-					_container: params.container
+					_eventContainer: params.eventContainer
 				});
 				this._prepareCheckout();
 			}
@@ -117,10 +89,14 @@
 
 				_prepareCheckout: function _prepareCheckout() {
 					if (!this._checkoutWindow) {
-						this._checkoutPageHolder = this._makePageHolder(this._params.containerId || true);
+						this._checkoutPageHolder = this._makePageHolder({ dimBackground: true, wrapperId: this._params.containerId });
 						this._checkoutListener = this._makeCheckoutListener();
 						this._initCheckoutIframe(this._checkoutPageHolder.iframe, !this._checkoutPageHolder.isPopup);
 					}
+				},
+
+				_makePageHolder: function _makePageHolder(opts) {
+					return new PageHolder(opts);
 				},
 
 				_sendConfigToCheckout: function _sendConfigToCheckout(params) {
@@ -174,50 +150,19 @@
 				},
 
 				_showCheckout: function _showCheckout() {
-					if (this._checkoutPageHolder.isPopup) {
-						this._styleElement(this._checkoutPageHolder.wrapper, { visibility: 'visible', opacity: 1 });
-						document.body.style.overflow = 'hidden';
-						this._styleElement(this._checkoutPageHolder.iframe, { transform: 'scale(1)', opacity: 1 });
-					}
+					this._checkoutPageHolder.popup(); // will only show popup if it IS a popup
 					this._listenToCheckout();
 					this._notify(QP_SHOW);
 				},
 
 				_hideCheckout: function _hideCheckout() {
-					if (this._checkoutPageHolder.isPopup) {
-						setTimeout(function (_this) {
-							return function () {
-								_this._checkoutPageHolder.wrapper.style.visibility = 'hidden';
-							};
-						}(this), ANIM_TIME * 1.2);
-						document.body.style.overflow = '';
-						this._styleElement(this._checkoutPageHolder.iframe, { transform: 'scale(0.9)', opacity: 0 });
-						this._checkoutPageHolder.wrapper.style.opacity = '0';
-					}
+					this._checkoutPageHolder.hidePopup(); // will only hide popup if it IS a popup
 					this._active = false;
 					this._notify(QP_HIDE);
 				},
 
 				_notify: function _notify(what) {
-					(this._container || document).dispatchEvent(_event(what, { bubbles: !0, cancelable: !1, detail: void 0 }));
-				},
-
-				_prepareWrapper: function _prepareWrapper() {
-					var useGreyBackground = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
-
-					var style = void 0,
-					    wrapper = void 0;
-					style = useGreyBackground ? STYLE_WRAPPER_GREY : STYLE_WRAPPER;
-					wrapper = this._createStyledElement('div', style);
-					wrapper.classList.add(CLASS_WRAPPER);
-					document.body.appendChild(wrapper);
-					return wrapper;
-				},
-
-				_prepareIframe: function _prepareIframe() {
-					var forPopup = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
-
-					return this._createStyledElement('iframe', forPopup ? STYLE_IFRAME_POPUP : STYLE_IFRAME);
+					(this._eventContainer || document).dispatchEvent(_event(what, { bubbles: !0, cancelable: !1, detail: void 0 }));
 				},
 
 				_initCheckoutIframe: function _initCheckoutIframe(iframe, autoStart) {
@@ -229,27 +174,6 @@
 							_autoStart && _this.open();
 						};
 					}(this, autoStart));
-				},
-
-				_createStyledElement: function _createStyledElement(type, styles) {
-					var elem = document.createElement(type);
-					return this._styleElement(elem, styles);
-				},
-
-				_styleElement: function _styleElement(elem, styles) {
-					var transf = ['webkitT', 'MozT', 'msT', 'OT'],
-					    transi = ['-webkit-', '-moz-', '-ms-', '-o-'];
-					var st = void 0,
-					    attr = void 0;
-					for (attr in styles) {
-						elem.style[attr] = styles[attr];
-						if (attr == 'transform') for (st in transf) {
-							elem.style[transf[st] + 'ransform'] = styles[attr];
-						}if (attr == 'transition') for (st in transi) {
-							elem.style[transi[st] + 'transition'] = styles[attr].replace('transform', transi[st] + 'transform');
-						}
-					}
-					return elem;
 				},
 
 				_doPayment: function _doPayment(url, tokenObj, cfg) {
@@ -287,27 +211,6 @@
 				_showPaymentRequestError: function _showPaymentRequestError(msg) {
 					alert(msg || 'There was an error making the payment request');
 					this._hideCheckout();
-				},
-
-				_makePageHolder: function _makePageHolder(wrapperIdOrBackground) {
-					var pageHolder = void 0;
-					if (typeof wrapperIdOrBackground == 'boolean') {
-						// we're making a popup
-						pageHolder = {
-							wrapper: this._prepareWrapper(wrapperIdOrBackground),
-							iframe: this._prepareIframe(),
-							isPopup: true
-						};
-					} else {
-						// page is to be contained inside element with given id
-						pageHolder = {
-							wrapper: document.getElementById(wrapperIdOrBackground),
-							iframe: this._prepareIframe(false),
-							isPopup: false
-						};
-					}
-					pageHolder.wrapper.appendChild(pageHolder.iframe);
-					return pageHolder;
 				}
 
 			});
@@ -324,6 +227,114 @@
 				}
 				return newObj;
 			}
+
+			//-----------------------------------------------------------------------
+
+			var ANIM_TIME = 300;
+
+			function PageHolder(opts) {
+
+				var STYLE_WRAPPER = {
+					border: 'none',
+					opacity: '0',
+					visibility: 'hidden',
+					zIndex: '99999',
+					left: '0',
+					top: '0',
+					position: 'fixed',
+					overflowX: 'hidden',
+					width: '100%',
+					height: '100%',
+					transition: ANIM_TIME + 'ms opacity ease, transform ' + ANIM_TIME + 'ms'
+				},
+				    STYLE_WRAPPER_GREY = _merge({
+					backgroundColor: 'rgba(0,0,0,0.75)'
+				}, STYLE_WRAPPER),
+				    CLASS_WRAPPER = 'qp-wrapper',
+				    STYLE_IFRAME = {
+					width: '100%',
+					height: '100%',
+					border: 'none',
+					margin: '0'
+				},
+				    STYLE_IFRAME_POPUP = _merge({
+					opacity: '0',
+					transform: 'scale(0.9)',
+					transition: ANIM_TIME + 'ms opacity ease, transform ' + ANIM_TIME + 'ms'
+				}, STYLE_IFRAME);
+
+				_init(this, opts);
+
+				function _init(_this, opts) {
+					var isPopup = _this.isPopup = !opts.wrapperId;
+					_this.wrapper = isPopup ? _prepareWrapper(opts.dimBackground) : document.getElementById(opts.wrapperId);
+					_this.iframe = _prepareIframe(isPopup);
+					_this.wrapper.appendChild(_this.iframe);
+				}
+
+				function _prepareWrapper(useGreyBackground) {
+					var style = void 0,
+					    wrapper = void 0;
+					style = useGreyBackground ? STYLE_WRAPPER_GREY : STYLE_WRAPPER;
+					wrapper = _createStyledElement('div', style);
+					wrapper.classList.add(CLASS_WRAPPER);
+					document.body.appendChild(wrapper);
+					return wrapper;
+				}
+
+				function _prepareIframe(forPopup) {
+					return _createStyledElement('iframe', forPopup ? STYLE_IFRAME_POPUP : STYLE_IFRAME);
+				}
+			}
+
+			_merge(PageHolder.prototype, {
+
+				popup: function popup() {
+					if (this.isPopup) {
+						_styleElement(this.wrapper, { visibility: 'visible', opacity: 1 });
+						document.body.style.overflow = 'hidden';
+						_styleElement(this.iframe, { transform: 'scale(1)', opacity: 1 });
+					}
+				},
+
+				hidePopup: function hidePopup() {
+					if (this.isPopup) {
+						setTimeout(function (_this) {
+							return function () {
+								_this.wrapper.style.visibility = 'hidden';
+							};
+						}(this), ANIM_TIME * 1.2);
+						document.body.style.overflow = '';
+						_styleElement(this.iframe, { transform: 'scale(0.9)', opacity: 0 });
+						this.wrapper.style.opacity = '0';
+					}
+				}
+
+			});
+
+			function _createStyledElement(type, styles) {
+				var elem = document.createElement(type);
+				return _styleElement(elem, styles);
+			}
+
+			function _styleElement(elem, styles) {
+				var transf = ['webkitT', 'MozT', 'msT', 'OT'],
+				    transi = ['-webkit-', '-moz-', '-ms-', '-o-'];
+				var st = void 0,
+				    attr = void 0;
+				for (attr in styles) {
+					elem.style[attr] = styles[attr];
+					if (attr == 'transform') for (st in transf) {
+						elem.style[transf[st] + 'ransform'] = styles[attr];
+					}if (attr == 'transition') for (st in transi) {
+						elem.style[transi[st] + 'transition'] = styles[attr].replace('transform', transi[st] + 'transform');
+					}
+				}
+				return elem;
+			}
+
+			//-----------------------------------------------------------------------
+
 
 			return {
 				configure: configure,
@@ -364,7 +375,7 @@
 			var cfg = getQPConfigFromAttribs([].slice.call(qpScript.attributes)),
 			    container = qpScript.parentNode,
 			    launcher = void 0;
-			cfg.container = container;
+			cfg.eventContainer = container;
 			launcher = window.Paysbuy.QuickPay.configure(cfg);
 
 			// create quickpay button
@@ -375,7 +386,7 @@
 			    exts = ['name', 'email', 'phone'],
 			    fields = { token: makeTokenField(prefix + 'token') };
 			exts.forEach(function (ext) {
-				if (cfg['show' + ext[0].toUpperCase() + ext.substr(1)]) fields[ext] = makeTokenField(prefix + ext);;
+				if (cfg['show' + ext[0].toUpperCase() + ext.substr(1)]) fields[ext] = makeTokenField(prefix + ext);
 			});
 
 			// attach return handler to launcher

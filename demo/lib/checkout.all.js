@@ -1,6 +1,57 @@
 'use strict';
 
-function Ui($) {
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var Lang = function () {
+	var _error_paysbuyTokeniz, _fld_email, _fld_card, _fld_expiry, _fld_cvv, _fld_name, _fld_phone, _fld_waveId, _btn_pay;
+
+	var EN_GB = 'en_GB',
+	    TH_TH = 'th_TH';
+
+	var DEFAULT_LOCALE = EN_GB;
+
+	var LANG_STRINGS = {
+
+		// Error messages
+		error_paysbuyTokenizer: (_error_paysbuyTokeniz = {}, _defineProperty(_error_paysbuyTokeniz, EN_GB, 'There was a problem with the Paysbuy tokenizer. Please try again'), _defineProperty(_error_paysbuyTokeniz, TH_TH, 'เกิดปัญหากับ Paysbuy Tokenizer กรุณาลองใหม่อีกครั้ง'), _error_paysbuyTokeniz),
+
+		// Tab headings
+		tab_card: _defineProperty({}, EN_GB, 'Card'),
+		tab_waveMoney: _defineProperty({}, EN_GB, 'Wave Money'),
+
+		// Field labels
+		fld_email: (_fld_email = {}, _defineProperty(_fld_email, EN_GB, 'Email Address'), _defineProperty(_fld_email, TH_TH, 'ที่อยู่อีเมล'), _fld_email),
+		fld_card: (_fld_card = {}, _defineProperty(_fld_card, EN_GB, 'Card number'), _defineProperty(_fld_card, TH_TH, 'หมายเลขบัตร'), _fld_card),
+		fld_expiry: (_fld_expiry = {}, _defineProperty(_fld_expiry, EN_GB, 'Expiry MM/YY'), _defineProperty(_fld_expiry, TH_TH, 'หมดอายุ MM/YY'), _fld_expiry),
+		fld_cvv: (_fld_cvv = {}, _defineProperty(_fld_cvv, EN_GB, 'CVV'), _defineProperty(_fld_cvv, TH_TH, 'หมายเลข CVV'), _fld_cvv),
+		fld_name: (_fld_name = {}, _defineProperty(_fld_name, EN_GB, 'Name on Card'), _defineProperty(_fld_name, TH_TH, 'ชื่อบนบัตร'), _fld_name),
+		fld_phone: (_fld_phone = {}, _defineProperty(_fld_phone, EN_GB, 'Phone'), _defineProperty(_fld_phone, TH_TH, 'โทรศัพท์'), _fld_phone),
+		fld_waveId: (_fld_waveId = {}, _defineProperty(_fld_waveId, EN_GB, 'Phone number'), _defineProperty(_fld_waveId, TH_TH, 'หมายเลขโทรศัพท์'), _fld_waveId),
+
+		// Button Label
+		btn_pay: (_btn_pay = {}, _defineProperty(_btn_pay, EN_GB, 'Pay {amount}'), _defineProperty(_btn_pay, TH_TH, 'ชำระ {amount}'), _btn_pay)
+
+	};
+
+	var handler = {
+		get: function get(strings, key) {
+			if (key == 'locale') return handler.locale || DEFAULT_LOCALE;
+			if (key in strings) return strings[key][handler.locale] || strings[key][DEFAULT_LOCALE];
+		},
+		set: function set(strings, key, value) {
+			if (key == 'locale') {
+				handler.locale = value;
+				return true;
+			}
+		},
+		locale: ''
+	};
+
+	return new Proxy(LANG_STRINGS, handler);
+}();
+;'use strict';
+
+function Ui($, L) {
 	var _this2 = this;
 
 	var KEYCODE_ESC = 27,
@@ -80,6 +131,7 @@ function Ui($) {
 	    blurValidateActive = true;
 
 	this.form = form;
+	this.Lang = L;
 	this.getFormValidations = function () {
 		var method = $('.qp-methodpage:visible').attr('id').replace('qp-form-', '');
 		return formValidations[method];
@@ -91,7 +143,7 @@ function Ui($) {
 		$(document).on('keyup', _closeOnEsc);
 		all_inputs.on('blur', _validateOnBlur);
 		fld_cardNum.validateCreditCard(_handleValidatedCardNum);
-		fld_expiry.on('keyup change', _formatExpiry);
+		fld_expiry.on('keydown change', _formatExpiry);
 		$('ul.tabs').tabs({ onShow: function onShow(e) {
 				_focusFirstField(e);
 			} });
@@ -180,6 +232,8 @@ function Ui($) {
 		blurValidateActive = false;
 		_clearFields();
 		_this2.clearInvalidFields();
+		// set locale
+		_setLocale(d.locale);
 		// heading
 		heading.html(d.title).toggle(!!d.title);
 		// image
@@ -216,6 +270,15 @@ function Ui($) {
 		blurValidateActive = true;
 	};
 
+	function _setLocale(locale) {
+		_this.Lang.locale = locale;
+		$('[data-lang]').each(function (idx, el) {
+			var _t = $(el),
+			    html = _this.Lang[_t.attr('data-lang')];
+			_t.html(html);
+		});
+	}
+
 	function _setupTabs(methods) {
 		// hide all tabs and method forms first
 		$('.qp-methodpage, .qp-tabs li').hide();
@@ -235,7 +298,7 @@ function Ui($) {
 		var _this3 = this;
 
 		all_inputs.val('').each(function () {
-			$(_this3).focus().blur();
+			return $(_this3).focus().blur();
 		});
 		$('form *').removeAttr('data-cardtype');
 	}
@@ -271,7 +334,8 @@ function Ui($) {
 	};
 
 	function _getButtonLabel(txt, amount, curr) {
-		return txt.replace('{amount}', _formatAmount(amount, curr));
+		var text = txt || _this.Lang.btn_pay;
+		return text.replace('{amount}', _formatAmount(amount, curr));
 	}
 
 	function _formatAmount(amount, curr) {
@@ -394,7 +458,7 @@ function CheckoutApp(ui, validator, tokenizer, windowMessenger) {
 		if (response.success) {
 			_returnSuccess(response.object.token.id);
 		} else {
-			alert('There was a problem with the PAYSBUY tokenizer. Please try again');
+			alert(ui.Lang.error_paysbuyTokenizer);
 		}
 	}
 

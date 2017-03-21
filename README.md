@@ -85,7 +85,7 @@ Parameter         | Default value    | Description
 key               |                  | Public API key for the PAYSBUY API
 [onTokenReceived] |                  | Handler function to process successful tokenization result
 [image]           |                  | URL of image to show on checkout form (square image recommended - 74x74 or larger)
-[locale]          | `'en-GB'`        | Sets the locale for the checkout - will affect the display language (when i18n is done!)
+[locale]          | `'en-GB'`        | Sets the locale for the checkout - will affect the display language (translations may be incomplete)
 [submitLabel]     | `'Pay {amount}'` | Label for 'Pay' button on checkout popup. `{amount}` will be replaced by a formatted currency string using the specified amount
 [title]           |                  | Title for checkout popup (often the shop/store name)
 [description]     |                  | A description of what is being paid for
