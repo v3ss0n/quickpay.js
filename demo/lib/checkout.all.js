@@ -34,20 +34,14 @@ var Lang = function () {
 	};
 
 	var handler = {
-		get: function get(strings, key) {
+		get: function get(key) {
 			if (key == 'locale') return handler.locale || DEFAULT_LOCALE;
-			if (key in strings) return strings[key][handler.locale] || strings[key][DEFAULT_LOCALE];
-		},
-		set: function set(strings, key, value) {
-			if (key == 'locale') {
-				handler.locale = value;
-				return true;
-			}
+			if (key in LANG_STRINGS) return LANG_STRINGS[key][handler.locale] || LANG_STRINGS[key][DEFAULT_LOCALE];
 		},
 		locale: ''
 	};
 
-	return new Proxy(LANG_STRINGS, handler);
+	return handler;
 }();
 ;'use strict';
 
@@ -274,7 +268,7 @@ function Ui($, L) {
 		_this.Lang.locale = locale;
 		$('[data-lang]').each(function (idx, el) {
 			var _t = $(el),
-			    html = _this.Lang[_t.attr('data-lang')];
+			    html = _this.Lang.get(_t.attr('data-lang'));
 			_t.html(html);
 		});
 	}
@@ -334,7 +328,7 @@ function Ui($, L) {
 	};
 
 	function _getButtonLabel(txt, amount, curr) {
-		var text = txt || _this.Lang.btn_pay;
+		var text = txt || _this.Lang.get('btn_pay');
 		return text.replace('{amount}', _formatAmount(amount, curr));
 	}
 
@@ -458,7 +452,7 @@ function CheckoutApp(ui, validator, tokenizer, windowMessenger) {
 		if (response.success) {
 			_returnSuccess(response.object.token.id);
 		} else {
-			alert(ui.Lang.error_paysbuyTokenizer);
+			alert(ui.Lang.get('error_paysbuyTokenizer'));
 		}
 	}
 
